@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-tasks',
   template: `
+    <button routerLink="/home">Back to Home</button>
     <h2>Task Management</h2>
 
     @if (authService.user()) {
@@ -66,10 +67,15 @@ export class TasksComponent implements OnInit {
   }
 
   loadTasks() {
-    this.taskService.getTasks().subscribe({
-      next: (tasks) => this.tasks.set(tasks),
-      error: (err) => console.error('Error loading tasks:', err)
-    });
+    const userId = this.authService.user()?.id;
+    if (userId) {
+      this.taskService.getTasks(userId).subscribe({
+        next: (tasks) => this.tasks.set(tasks),
+        error: (err) => console.error('Error loading tasks:', err)
+      });
+    } else {
+      console.error('Cannot load tasks: User ID not available.');
+    }
   }
 
   saveTask() {

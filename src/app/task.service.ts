@@ -13,28 +13,27 @@ export interface Task {
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private apiUrl = 'http://localhost:3000/'; // Adjust as needed
+  private baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
+  getTasks(userId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.baseUrl}/users/${userId}/tasks`);
   }
 
   getTask(id: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${id}`);
+    return this.http.get<Task>(`${this.baseUrl}/tasks/${id}`);
   }
 
   createTask(task: Task): Observable<Task> {
-    console.log('createTask', task);
-    return this.http.post<Task>(`${this.apiUrl}/task`, { task }); // Wrap in 'task' for Rails strong params
+    return this.http.post<Task>(`${this.baseUrl}/task`, { task });
   }
 
   updateTask(id: number, task: Partial<Task>): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/${id}`, { task }); // Wrap in 'task' for Rails strong params
+    return this.http.put<Task>(`${this.baseUrl}/task/${id}`, { task });
   }
 
   deleteTask(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/task/${id}`);
   }
 } 

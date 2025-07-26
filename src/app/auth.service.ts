@@ -22,6 +22,7 @@ export class AuthService {
   }
 
   login(data: { email: string; password: string }) {
+    console.log('login', data);
     return this.http.post(`${this.apiUrl}/login`, data);
   }
 
